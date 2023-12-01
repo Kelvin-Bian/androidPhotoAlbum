@@ -2,6 +2,7 @@ package com.example.testphotos;
 
 import android.os.Bundle;
 
+import com.example.testphotos.classes.*;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,12 +25,26 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        if (user == null) {
+            user = new User();
+        }
+        // Create a bundle to hold the variable
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user", user); // Replace "key" with a unique identifier
+
+        // Create an instance of FirstFragment and set the arguments bundle
+        FirstFragment fragment = new FirstFragment();
+        fragment.setArguments(bundle);
+
 
         setSupportActionBar(binding.toolbar);
 
