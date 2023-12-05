@@ -18,13 +18,16 @@
             android:id="@+id/createAlbumButton"
             android:layout_width="117dp"
             android:layout_height="51dp"
+            android:layout_marginStart="147dp"
+            android:layout_marginEnd="131dp"
             android:text="Create Album"
-            tools:layout_editor_absoluteX="131dp"
-            tools:layout_editor_absoluteY="16dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="388dp"
+            android:layout_width="wrap_content"
             android:layout_height="46dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -35,21 +38,22 @@
                 android:id="@+id/openAlbumButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
+                android:includeFontPadding="false"
                 android:text="Open" />
 
             <Button
                 android:id="@+id/deleteAlbumButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
                 android:text="Delete" />
 
             <Button
                 android:id="@+id/renameAlbumButton"
-                android:layout_width="128dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
                 android:text="Rename" />
         </LinearLayout>
 

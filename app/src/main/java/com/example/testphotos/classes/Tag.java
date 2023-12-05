@@ -54,11 +54,11 @@ public class Tag {
     /**
      * Returns a string representation of the tag.
      *
-     * @return a string in the format "name: value"
+     * @return a string in the format "value"
      */
     @Override
     public String toString() {
-        return name + ": " + value;
+        return value;
     }
 
     /**
