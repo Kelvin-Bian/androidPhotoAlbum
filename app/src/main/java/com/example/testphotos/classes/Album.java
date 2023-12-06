@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-public class Album {
+public class Album implements Serializable{
     /**
      * HashMap to store photos, where the key is the photo path and the value is the corresponding Photo object.
      */

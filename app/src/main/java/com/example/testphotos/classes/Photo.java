@@ -10,7 +10,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class Photo {
+public class Photo implements Serializable{
     private String path;
     private String caption;
     private LocalDate date;

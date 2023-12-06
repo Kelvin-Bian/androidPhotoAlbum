@@ -25,6 +25,18 @@ public class User implements Serializable {
     }
 
     /**
+     * @return An ArrayList containing the album names.
+     */
+    public ArrayList<String> getAlbumNames() {
+        ArrayList<Album> albumList = new ArrayList<>(albums.values());
+        ArrayList<String> albumNames = new ArrayList<>();
+        for (Album a: albumList) {
+            albumNames.add(a.getName());
+        }
+        return albumNames;
+    }
+
+    /**
      * Finds and retrieves a specific album by name.
      *
      * @param n The name of the album to be found.

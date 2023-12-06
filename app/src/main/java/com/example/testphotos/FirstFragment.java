@@ -1,6 +1,7 @@
 package com.example.testphotos;
 
         import android.os.Bundle;
+        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -18,6 +19,7 @@ package com.example.testphotos;
         import android.widget.EditText;
         import android.content.DialogInterface;
         import android.text.InputType;
+        import androidx.navigation.Navigation;
 
 
         import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class FirstFragment extends Fragment {
     private FragmentFirstBinding binding;
     private ListView albumList;
     private ArrayAdapter<String> adapter;
-    private List<String> albumNames;
+//    private List<String> albumNames;
     private User user;
 
     @Override
@@ -39,23 +41,35 @@ public class FirstFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         albumList = binding.albumList; // Replace with your ListView ID
-        albumNames = new ArrayList<>();
-        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, albumNames);
-        albumList.setAdapter(adapter);
 
         // Retrieve the object from the arguments bundle
         Bundle args = getArguments();
-        if (args != null) {
-            User user = (User) args.getSerializable("user"); // Replace "object_key" with the same key used in MainActivity
-            // Now you can use the yourObject in your Fragment
+        if (args != null && args.containsKey("user")) {
+            user = (User) args.getSerializable("user");
+            Log.d("FirstFragment", "User object received from arguments.");
+        } else {
+            user = new User();
+            Log.d("FirstFragment", "User object not found in arguments, created new User object.");
         }
+
+//        albumNames = new ArrayList<>();
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, user.getAlbumNames());
+        albumList.setAdapter(adapter);
+
+
 
         return binding.getRoot();
     }
 
     private void createAlbum(String albumName) {
-        albumNames.add(albumName);
-        adapter.notifyDataSetChanged();
+        if (user.addAlbum(albumName)) {
+            user.addAlbum(albumName);
+            adapter.clear();
+            adapter.addAll(user.getAlbumNames());
+            adapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(getActivity(), "Album name already exists", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -125,9 +139,16 @@ public class FirstFragment extends Fragment {
         });
 
         albumList.setOnItemClickListener((parent, view1, position, id) -> {
-            String selectedAlbum = albumNames.get(position);
-            // Implement what happens when an album is clicked
-            Toast.makeText(getActivity(), "Selected Album: " + selectedAlbum, Toast.LENGTH_SHORT).show();
+            if (user != null) {
+                String selectedAlbum = user.getAlbumNames().get(position);
+
+                // Navigate to SecondFragment
+                FirstFragmentDirections.ActionFirstFragmentToSecondFragment action =
+                        FirstFragmentDirections.actionFirstFragmentToSecondFragment(user, selectedAlbum);
+                Navigation.findNavController(view).navigate(action);
+            } else {
+                Toast.makeText(getActivity(), "User data is not available", Toast.LENGTH_SHORT).show();
+            }
         });
 
     }

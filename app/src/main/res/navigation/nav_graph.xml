@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.testphotos.classes.User" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -24,5 +27,11 @@
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.testphotos.classes.User" />
+        <argument
+            android:name="albumName"
+            app:argType="string" />
     </fragment>
 </navigation>

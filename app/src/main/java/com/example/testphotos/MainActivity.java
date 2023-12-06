@@ -8,6 +8,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.view.WindowCompat;
@@ -33,23 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.photoviewer);
-        testbinding = PhotoviewerBinding.inflate(getLayoutInflater());
-        setContentView(testbinding.getRoot());
-
-        if (user == null) {
-            user = new User();
-        }
-        // Create a bundle to hold the variable
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user); // Replace "key" with a unique identifier
-
-        //testing photoviewer
-        PhotoViewer photoViewer = new PhotoViewer();
-        photoViewer.setArguments(bundle);
-
-//
-//        binding = ActivityMainBinding.inflate(getLayoutInflater());
-//        setContentView(binding.getRoot());
+//        testbinding = PhotoviewerBinding.inflate(getLayoutInflater());
+//        setContentView(testbinding.getRoot());
 //
 //        if (user == null) {
 //            user = new User();
@@ -57,26 +43,37 @@ public class MainActivity extends AppCompatActivity {
 //        // Create a bundle to hold the variable
 //        Bundle bundle = new Bundle();
 //        bundle.putSerializable("user", user); // Replace "key" with a unique identifier
-//
-//        // Create an instance of FirstFragment and set the arguments bundle
-//        FirstFragment fragment = new FirstFragment();
-//        fragment.setArguments(bundle);
 
-//        setSupportActionBar(binding.toolbar);
-//
-//
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//
-//        binding.fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAnchorView(R.id.fab)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+//        //testing photoviewer
+//        PhotoViewer photoViewer = new PhotoViewer();
+//        photoViewer.setArguments(bundle);
+
+//      actual main class
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        if (user == null) {
+            user = new User();
+            user.addAlbum("testAlbum");
+        }
+        setSupportActionBar(binding.toolbar);
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+
+        // Conditionally navigate to FirstFragment with the User object
+        if (navController.getCurrentDestination() != null && navController.getCurrentDestination().getId() == R.id.FirstFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", user);
+            navController.navigate(R.id.FirstFragment, bundle);
+        }
     }
 
     @Override
