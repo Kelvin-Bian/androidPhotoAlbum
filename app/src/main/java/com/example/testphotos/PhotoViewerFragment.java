@@ -16,7 +16,7 @@ import com.example.testphotos.databinding.PhotoviewerBinding;
 
 import java.util.ArrayList;
 
-public class PhotoViewer extends Fragment {
+public class PhotoViewerFragment extends Fragment {
     private PhotoviewerBinding binding;
 
     private RecyclerView locationTagValues;

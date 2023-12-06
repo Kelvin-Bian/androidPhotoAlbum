@@ -11,7 +11,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.testphotos.PhotoViewer;
 import com.example.testphotos.classes.Tag;
 
 import java.util.ArrayList;
