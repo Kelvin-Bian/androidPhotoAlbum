@@ -5,4 +5,5 @@
     <color name="light_primary">#065B6A</color>
     <color name="bg">#CAE6ED</color>
     <color name="text">#180B3C</color>
+    <color name="list_bg">#20065B6A</color>
 </resources>

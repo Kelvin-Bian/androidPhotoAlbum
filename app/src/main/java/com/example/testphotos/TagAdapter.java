@@ -35,7 +35,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         this.tags.setValue(tags);
     }
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(int position, String text);
     }
 
     // Set the click listener
@@ -75,12 +75,14 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TagViewHolder holder, int position) {
         holder.getTagTextView().setText(tags.getValue().get(position).toString());
+        TextView tagValue = holder.getTagTextView();
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Handle button click here
+                String text = tagValue.getText().toString();
                 if (onItemClickListenerEdit != null) {
-                    onItemClickListenerEdit.onItemClick(holder.getAdapterPosition());
+                    onItemClickListenerEdit.onItemClick(holder.getAdapterPosition(), text);
                 }
             }
         });
@@ -88,8 +90,9 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
             @Override
             public void onClick(View v) {
                 // Handle button click here
+                String text = tagValue.getText().toString();
                 if (onItemClickListenerDelete != null) {
-                    onItemClickListenerDelete.onItemClick(holder.getAdapterPosition());
+                    onItemClickListenerDelete.onItemClick(holder.getAdapterPosition(), text);
                 }
             }
         });
@@ -98,5 +101,9 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     @Override
     public int getItemCount() {
         return tags.getValue().size();
+    }
+
+    public void setTags(ArrayList<Tag> t){
+        this.tags.setValue(t);
     }
 }

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public class Photo implements Serializable{
     private String path;
@@ -176,5 +177,15 @@ public class Photo implements Serializable{
 
         Photo p = (Photo) obj;
         return p.getPath().equals(path);
+    }
+
+    public ArrayList<Tag> getTagsByName(Predicate<String> matchingName){
+        ArrayList<Tag> res = new ArrayList<>();
+        for(Tag t: tags){
+            if(matchingName.test(t.getName())){
+                res.add(t);
+            }
+        }
+        return res;
     }
 }
