@@ -15,8 +15,11 @@ import com.example.testphotos.classes.Tag;
 
 import java.util.ArrayList;
 
-public class TagAdapter extends RecyclerView.Adapter {
+public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     private MutableLiveData<ArrayList<Tag>> tags;
+    private OnItemClickListener onItemClickListenerEdit;
+    private OnItemClickListener onItemClickListenerDelete;
+
     public TagAdapter(){
         this.tags = new MutableLiveData<ArrayList<Tag>>();
         ArrayList<Tag> test = new ArrayList<>();
@@ -31,6 +34,18 @@ public class TagAdapter extends RecyclerView.Adapter {
         this.tags = new MutableLiveData<ArrayList<Tag>>();
         this.tags.setValue(tags);
     }
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    // Set the click listener
+    public void setOnItemClickListenerEdit(OnItemClickListener listener) {
+        this.onItemClickListenerEdit = listener;
+    }
+    public void setOnItemClickListenerDelete(OnItemClickListener listener) {
+        this.onItemClickListenerDelete = listener;
+    }
+
     public static class TagViewHolder extends RecyclerView.ViewHolder {
         public TextView tagValue;
         public Button editButton;
@@ -52,14 +67,32 @@ public class TagAdapter extends RecyclerView.Adapter {
     }
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TagViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tag_item, parent, false);
         return new TagViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((TagViewHolder)holder).getTagTextView().setText(tags.getValue().get(position).toString());
+    public void onBindViewHolder(@NonNull TagViewHolder holder, int position) {
+        holder.getTagTextView().setText(tags.getValue().get(position).toString());
+        holder.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle button click here
+                if (onItemClickListenerEdit != null) {
+                    onItemClickListenerEdit.onItemClick(holder.getAdapterPosition());
+                }
+            }
+        });
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle button click here
+                if (onItemClickListenerDelete != null) {
+                    onItemClickListenerDelete.onItemClick(holder.getAdapterPosition());
+                }
+            }
+        });
     }
 
     @Override
