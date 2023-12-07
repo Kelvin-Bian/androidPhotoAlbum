@@ -30,7 +30,6 @@ public class FirstFragment extends Fragment {
     private FragmentFirstBinding binding;
     private ListView albumList;
     private ArrayAdapter<String> adapter;
-//    private List<String> albumNames;
     private User user;
 
     @Override
@@ -116,7 +115,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Handle the click for openAlbumButton
-                Toast.makeText(getActivity(), "Open Album button clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Open Album addPhotoButton clicked!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -125,7 +124,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Handle the click for deleteAlbumButton
-                Toast.makeText(getActivity(), "Delete Album button clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Delete Album addPhotoButton clicked!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -134,7 +133,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Handle the click for renameAlbumButton
-                Toast.makeText(getActivity(), "Rename Album button clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Rename Album addPhotoButton clicked!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -142,7 +141,7 @@ public class FirstFragment extends Fragment {
             if (user != null) {
                 String selectedAlbum = user.getAlbumNames().get(position);
 
-                // Navigate to SecondFragment
+                // Navigate to AlbumFragment
                 FirstFragmentDirections.ActionFirstFragmentToSecondFragment action =
                         FirstFragmentDirections.actionFirstFragmentToSecondFragment(user, selectedAlbum);
                 Navigation.findNavController(view).navigate(action);

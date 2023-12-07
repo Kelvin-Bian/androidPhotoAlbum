@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-    id("androidx.navigation.safeargs") version "2.7.5"
+    id("androidx.navigation.safeargs")
 }
 
 android {

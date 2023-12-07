@@ -13,16 +13,16 @@
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/AlbumFragment" />
         <argument
             android:name="user"
             app:argType="com.example.testphotos.classes.User" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.testphotos.SecondFragment"
+        android:id="@+id/AlbumFragment"
+        android:name="com.example.testphotos.AlbumFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_album">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
