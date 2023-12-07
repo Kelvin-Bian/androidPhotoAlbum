@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-    id("androidx.navigation.safeargs") version "2.7.5"
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.testphotos"
-        minSdk = 22
+        minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

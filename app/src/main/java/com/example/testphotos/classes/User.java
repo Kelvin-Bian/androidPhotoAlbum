@@ -1,4 +1,6 @@
 package com.example.testphotos.classes;
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,8 +78,7 @@ public class User implements Serializable {
      * @param photo The Photo object containing updated metadata.
      */
     public void updateSamePhotoRefs(Photo photo) {
-        for (Photo p : searchPhoto(photo.getPath())) {
-            p.setCaption(photo.getCaption());
+        for (Photo p : searchPhoto(photo.getUri())) {
             p.setTags(photo.getTags());
         }
     }
@@ -97,25 +98,21 @@ public class User implements Serializable {
      * @param p The new Photo object to be updated.
      */
     public void updateNewPhoto(Photo p) {
-        Photo photo = searchPhoto(p.getPath()).get(0);
+        Photo photo = searchPhoto(p.getUri()).get(0);
         if (photo != null) {
-            p.setCaption(photo.getCaption());
             p.setTags(photo.getTags());
         }
     }
 
     /**
      * Searches for a photo with a specific path in all albums.
-     *
-     * @param path The path of the photo to be searched.
-     * @return An ArrayList containing all instances of the photo found in different albums.
      */
-    public ArrayList<Photo> searchPhoto(String path) {
+    public ArrayList<Photo> searchPhoto(Uri uri) {
         ArrayList<Photo> result = new ArrayList<Photo>();
         Photo foundPhoto;
         List<Album> allAlbums = new ArrayList<>(albums.values());
         for (Album a : allAlbums) {
-            foundPhoto = a.findPhoto(path);
+            foundPhoto = a.findPhoto(uri);
             if (foundPhoto != null) result.add(foundPhoto);
             foundPhoto = null;
         }
@@ -124,15 +121,11 @@ public class User implements Serializable {
 
     /**
      * Searches for a photo with a specific path in a given album.
-     *
-     * @param album The Album object in which to search for the photo.
-     * @param path  The path of the photo to be searched.
-     * @return The Photo object if found, null otherwise.
      */
-    public Photo searchPhoto(Album album, String path) {
+    public Photo searchPhoto(Album album, Uri uri) {
         ArrayList<Photo> albumPhotos = album.getPhotos();
         for (int i = 0; i < albumPhotos.size(); i++) {
-            if (path.equals(albumPhotos.get(i).getPath())) {
+            if (uri.equals(albumPhotos.get(i).getUri())) {
                 return albumPhotos.get(i);
             }
         }

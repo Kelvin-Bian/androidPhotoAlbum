@@ -1,87 +1,53 @@
 package com.example.testphotos.classes;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import java.io.Serializable;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class Photo implements Serializable{
-    private String path;
-    private String caption;
-    private LocalDate date;
+public class Photo implements Serializable {
+    private transient Uri uri; // 'transient' as Uri is not Serializable
+    private String uriString; // Used for serialization
     private ArrayList<Tag> tags;
 
-    /**
-     * Constructs a Photo object with the given path and caption.
-     * Extracts the creation date from the file attributes using the last modified time.
-     *
-     * @param path    The path of the photo file.
-     * @param caption The caption associated with the photo.
-     */
-    public Photo(String path, String caption) {
-        try {
-            this.path = path;
-            this.caption = caption;
-            tags = new ArrayList<>();
-            Path file = FileSystems.getDefault().getPath(path);
-            BasicFileAttributes attributes = Files.readAttributes(file, BasicFileAttributes.class);
-            Instant lastModifiedInstant = attributes.lastModifiedTime().toInstant();
-            date = lastModifiedInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+    private Context context;
 
-            // Not sure about this part, need to test the whole date extraction part
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            // System.out.println("Creation Date: " + formatter.format(date));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public Photo(Uri uri) {
+        this.uri = uri;
+        this.uriString = uri.toString(); // Convert Uri to String for serialization
+        this.tags = new ArrayList<>();
     }
 
-    /**
-     * Constructs a Photo object with the given path.
-     * Extracts the creation date from the file attributes using the last modified time.
-     *
-     * @param path The path of the photo file.
-     */
-    public Photo(String path) {
-        try {
-            this.path = path;
-            tags = new ArrayList<>();
-            Path file = FileSystems.getDefault().getPath(path);
-            BasicFileAttributes attributes = Files.readAttributes(file, BasicFileAttributes.class);
-            Instant lastModifiedInstant = attributes.lastModifiedTime().toInstant();
-            date = lastModifiedInstant.atZone(ZoneId.systemDefault()).toLocalDate();
-
-            // Not sure about this part, need to test the whole date extraction part
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            // System.out.println("Creation Date: " + formatter.format(date));
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    public Bitmap getBitmap() {
+        if (uri == null && uriString != null) {
+            uri = Uri.parse(uriString); // Convert String back to Uri if needed
         }
+        // Replace with code to decode Bitmap from Uri
+        // Example: return BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
+        return null;
     }
 
-    /**
-     * Retrieves the JavaFX Image object corresponding to the photo file.
-     *
-     * @return The Image object.
-     */
-//    public Image getImage() {
-//        return new Image("file:" + path);
-//    }
 
-    /**
-     * Retrieves the path of the photo file.
-     *
-     * @return The path of the photo.
-     */
-    public String getPath() {
-        return path;
+    public Uri getUri() {
+        if (uri == null && uriString != null) {
+            uri = Uri.parse(uriString); // Convert String back to Uri if needed
+        }
+        return uri;
+    }
+
+    public String getFileName() {
+        // Logic to extract file name from Uri
+        // This is just an example and may need to be adapted depending on the Uri's format
+        if (uri != null) {
+            String path = uri.getPath();
+            int cut = path.lastIndexOf('/');
+            if (cut != -1) {
+                return path.substring(cut + 1);
+            }
+        }
+        return null;
     }
 
     /**
@@ -125,32 +91,6 @@ public class Photo implements Serializable{
         tags.remove(t);
     }
 
-    /**
-     * Sets the caption associated with the photo.
-     *
-     * @param caption The new caption for the photo.
-     */
-    public void setCaption(String caption) {
-        this.caption = caption;
-    }
-
-    /**
-     * Retrieves the creation date of the photo.
-     *
-     * @return The creation date.
-     */
-    public LocalDate getDate() {
-        return date;
-    }
-
-    /**
-     * Retrieves the caption associated with the photo.
-     *
-     * @return The caption.
-     */
-    public String getCaption() {
-        return caption;
-    }
 
     /**
      * Checks if a tag with a given name and value already exists for the photo.
@@ -164,17 +104,13 @@ public class Photo implements Serializable{
         return tags.indexOf(temp) != -1;
     }
 
-    /**
-     * Checks if this Photo is equal to another object.
-     *
-     * @param obj The object to compare.
-     * @return true if the objects are equal, false otherwise.
-     */
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+        uriString = uri == null ? null : uri.toString();
+        out.defaultWriteObject();
+    }
 
-        Photo p = (Photo) obj;
-        return p.getPath().equals(path);
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        uri = uriString == null ? null : Uri.parse(uriString);
     }
 }
