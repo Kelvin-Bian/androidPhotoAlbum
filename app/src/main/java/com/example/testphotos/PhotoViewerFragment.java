@@ -2,6 +2,7 @@ package com.example.testphotos;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -16,10 +17,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.testphotos.classes.Album;
 import com.example.testphotos.classes.Photo;
 import com.example.testphotos.classes.Tag;
 import com.example.testphotos.databinding.PhotoviewerBinding;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class PhotoViewerFragment extends Fragment {
@@ -36,12 +39,19 @@ public class PhotoViewerFragment extends Fragment {
     private TagAdapter locationTagAdapter;
     private TagAdapter personTagAdapter;
 
+    private Album album;
+    private Button prevButton;
+    private Button nextButton;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         binding = PhotoviewerBinding.inflate(inflater, container, false);
-        p = new Photo("/Users/jessicaluo/Desktop/android/app/src/main/res/drawable/river.png");
+        //@TODO pass in photo instead of using test photo
+        File file = new File("/Users/jessicaluo/Desktop/android/app/src/main/res/drawable/river.png");
+        Uri fileUri = Uri.fromFile(file);
+        p = new Photo(fileUri);
+        //@TODO set album to passed in album
         locationTags = p.getTagsByName(s-> s.equals("location"));
         personTags= p.getTagsByName(s->s.equals("person"));
 
@@ -64,6 +74,16 @@ public class PhotoViewerFragment extends Fragment {
 
         addPersonTagButton = binding.addPersonTagButton;
         setClickListenerAddTag(addPersonTagButton, false);
+
+        prevButton = binding.prevButton;
+        //@TODO slideshow function
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        nextButton = binding.nextButton;
         return binding.getRoot();
     }
 
