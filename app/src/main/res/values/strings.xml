@@ -8,6 +8,7 @@
     <string name="previous">Previous</string>
     <string name="edit">edit</string>
     <string name="delete">delete</string>
+    <string name="photoviewer_fragment_label">Photo Viewer</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

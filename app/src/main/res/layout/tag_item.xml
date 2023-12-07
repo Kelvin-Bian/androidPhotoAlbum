@@ -7,26 +7,25 @@
         android:id="@+id/tagValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_weight="1"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:text="tag value" />
 
     <Button
         android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_weight="1"
-        android:text="@string/edit" />
+        android:background="@drawable/baseline_edit_24"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp" />
 
     <Button
         android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_weight="1"
-        android:text="@string/delete" />
+        android:layout_width="30dp"
+        android:layout_height="30dp
+"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:background="@drawable/trash_icon" />
+
 </LinearLayout>
