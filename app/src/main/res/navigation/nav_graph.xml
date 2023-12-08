@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/PhotoViewerFragment">
+    app:startDestination="@id/FirstFragment">
 
     <fragment
         android:id="@+id/FirstFragment"
@@ -33,6 +33,9 @@
         <argument
             android:name="albumName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_AlbumFragment_to_PhotoViewerFragment"
+            app:destination="@id/PhotoViewerFragment" />
     </fragment>
     <fragment
         android:id="@+id/PhotoViewerFragment"
@@ -40,7 +43,16 @@
         android:label="@string/photoviewer_fragment_label"
         tools:layout="@layout/photoviewer">
         <action
-            android:id="@+id/action_PhotoViewerFragment_to_SecondFragment"
-            app:destination="@+id/SecondFragment"/>
+            android:id="@+id/action_PhotoViewerFragment_to_AlbumFragment"
+            app:destination="@id/AlbumFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.testphotos.classes.User" />
+        <argument
+            android:name="album"
+            app:argType="com.example.testphotos.classes.Album" />
+        <argument
+            android:name="photo"
+            app:argType="com.example.testphotos.classes.Photo" />
     </fragment>
 </navigation>

@@ -16,32 +16,37 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.testphotos.classes.Album;
 import com.example.testphotos.classes.Photo;
 import com.example.testphotos.classes.Tag;
+import com.example.testphotos.classes.User;
 import com.example.testphotos.databinding.PhotoviewerBinding;
 
 import java.util.ArrayList;
 
 public class PhotoViewerFragment extends Fragment {
     private PhotoviewerBinding binding;
-
     private RecyclerView locationTagValues;
     private RecyclerView personTagValues;
     private Photo p;
     private ArrayList<Tag> locationTags;
     private ArrayList<Tag> personTags;
-
     private Button addLocationTagButton;
     private Button addPersonTagButton;
     private TagAdapter locationTagAdapter;
     private TagAdapter personTagAdapter;
+
+    private Photo photo;
+    private User user;
+    private Album album;
 
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         binding = PhotoviewerBinding.inflate(inflater, container, false);
-        p = new Photo("/Users/jessicaluo/Desktop/android/app/src/main/res/drawable/river.png");
+//        this line doesn't work anymore as we use URIs for android phone photos instead of filepath
+//        p = new Photo("/Users/jessicaluo/Desktop/android/app/src/main/res/drawable/river.png");
         locationTags = p.getTagsByName(s-> s.equals("location"));
         personTags= p.getTagsByName(s->s.equals("person"));
 

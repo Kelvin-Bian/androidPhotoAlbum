@@ -1,5 +1,6 @@
 package com.example.testphotos;
 
+        import android.content.Context;
         import android.os.Bundle;
         import android.util.Log;
         import android.view.LayoutInflater;
@@ -22,6 +23,9 @@ package com.example.testphotos;
         import androidx.navigation.Navigation;
 
 
+        import java.io.FileOutputStream;
+        import java.io.IOException;
+        import java.io.ObjectOutputStream;
         import java.util.ArrayList;
         import java.util.List;
 
@@ -32,6 +36,18 @@ public class FirstFragment extends Fragment {
     private ArrayAdapter<String> adapter;
     private User user;
 
+    // Helper method to serialize the user object
+    private void saveUser(User user) {
+        try {
+            FileOutputStream fileOut = getContext().openFileOutput("user.ser", Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(user);
+            out.close();
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -66,6 +82,7 @@ public class FirstFragment extends Fragment {
             adapter.clear();
             adapter.addAll(user.getAlbumNames());
             adapter.notifyDataSetChanged();
+            saveUser(user);
         } else {
             Toast.makeText(getActivity(), "Album name already exists", Toast.LENGTH_SHORT).show();
         }

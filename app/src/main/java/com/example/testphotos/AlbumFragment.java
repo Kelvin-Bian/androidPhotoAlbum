@@ -1,7 +1,9 @@
 package com.example.testphotos;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +27,9 @@ import com.example.testphotos.classes.Photo;
 import com.example.testphotos.classes.User;
 import com.example.testphotos.databinding.FragmentAlbumBinding;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -37,7 +42,20 @@ public class AlbumFragment extends Fragment {
     private Album album;
     private String albumName;
     private PhotoAdapter adapter;
+    private Photo selectedPhoto;
 
+    // Helper method to serialize the user object
+    private void saveUser(User user) {
+        try {
+            FileOutputStream fileOut = getContext().openFileOutput("user.ser", Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(user);
+            out.close();
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -45,6 +63,8 @@ public class AlbumFragment extends Fragment {
     ) {
         // Inflate the layout for this fragment
         binding = FragmentAlbumBinding.inflate(inflater, container, false);
+
+
 
         // Retrieve arguments passed to this fragment
         if (getArguments() != null) {
@@ -80,13 +100,27 @@ public class AlbumFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
 
-            // Assuming you have a constructor in your Photo class that accepts a URI
-            Photo newPhoto = new Photo(imageUri);
+            // Take persistable URI permission so you can use this URI after app restarts
+            try {
+                getActivity().getContentResolver().takePersistableUriPermission(
+                        imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                );
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
 
-            // Add the new photo to the album
+            // Store the URI in SharedPreferences or a database for later use
+            SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("imageUri", imageUri.toString());
+            editor.apply();
+
+            // Rest of your code for handling the new photo
+            Photo newPhoto = new Photo(imageUri);
             if (album != null) {
-                album.addPhoto(newPhoto); // Make sure your Album class has a method to add photos
-                updateListView(); // Update the list view to reflect the new photo addition
+                album.addPhoto(newPhoto);
+                updateListView();
+                saveUser(user);
             }
         } else {
             Toast.makeText(getContext(), "You haven't picked an image",Toast.LENGTH_LONG).show();
@@ -98,7 +132,7 @@ public class AlbumFragment extends Fragment {
         binding.addPhotoButton.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted, you can proceed with your logic to pick an image
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
 
@@ -122,9 +156,9 @@ public class AlbumFragment extends Fragment {
 
         binding.homeButton.setOnClickListener(v -> {
             if (user != null) {
-                AlbumFragmentDirections.ActionSecondFragmentToFirstFragment action =
+                NavDirections action =
                         AlbumFragmentDirections.actionSecondFragmentToFirstFragment(user);
-                NavHostFragment.findNavController(AlbumFragment.this).navigate((NavDirections) action);
+                NavHostFragment.findNavController(AlbumFragment.this).navigate(action);
             }
         });
 
@@ -133,14 +167,24 @@ public class AlbumFragment extends Fragment {
             Toast.makeText(getContext(), "Slideshow", Toast.LENGTH_SHORT).show();
         });
 
-        binding.openButton.setOnClickListener(v -> {
-            // Add your logic here
+        binding.openPhotoButton.setOnClickListener(v -> {
+            if (user != null && album != null && selectedPhoto != null) {
+                // Create a bundle with the necessary arguments
+                Bundle args = new Bundle();
+                args.putSerializable("user", user);
+                args.putSerializable("album", album);
+                args.putSerializable("selectedPhoto", selectedPhoto);
+
+                // Navigate to PhotoViewerFragment with the arguments
+                NavDirections action = AlbumFragmentDirections.actionAlbumFragmentToPhotoViewerFragment(user, album, selectedPhoto);
+                NavHostFragment.findNavController(this).navigate(action);
+            }
             Toast.makeText(getContext(), "Open Photo", Toast.LENGTH_SHORT).show();
         });
 
 
         binding.photoList.setOnItemClickListener((parent, v, position, id) -> {
-            // Add your logic here
+            selectedPhoto = adapter.getItem(position);
             Toast.makeText(getContext(), "Photo item clicked at position: " + position, Toast.LENGTH_SHORT).show();
         });
 
