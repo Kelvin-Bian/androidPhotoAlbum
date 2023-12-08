@@ -1,5 +1,9 @@
 package com.example.testphotos;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.example.testphotos.classes.*;
@@ -8,9 +12,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,6 +27,13 @@ import com.example.testphotos.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +42,35 @@ public class MainActivity extends AppCompatActivity {
 
     private PhotoviewerBinding testbinding;
     private User user;
+
+
+    // Helper method to serialize the user object
+    private void saveUser(User user) {
+        try {
+            FileOutputStream fileOut = openFileOutput("user.ser", Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(user);
+            out.close();
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Helper method to deserialize the user object
+    private User loadUser() {
+        User loadedUser = null;
+        try {
+            FileInputStream fileIn = openFileInput("user.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            loadedUser = (User) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return loadedUser;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 //      actual main class
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        user = loadUser();
         if (user == null) {
             user = new User();
         }
@@ -60,6 +102,12 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        if (!(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED)) {
+
+            // Permission is not granted, request it
+            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_IMAGES}, 100);
+            Toast.makeText(this, "Requested Permission", Toast.LENGTH_SHORT).show();
+        }
 
     }
     @Override

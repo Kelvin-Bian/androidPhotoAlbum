@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_first">
 
         <action
-            android:id="@+id/action_FirstFragment_to_AlbumFragment"
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/AlbumFragment" />
         <argument
             android:name="user"
@@ -25,35 +25,37 @@
         tools:layout="@layout/fragment_album">
 
         <action
-            android:id="@+id/action_AlbumFragment_to_FirstFragment"
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
-        <action
-            android:id="@+id/action_AlbumFragment_to_PhotoViewerFragment"
-            app:destination="@id/PhotoViewerFragment"/>
         <argument
             android:name="user"
             app:argType="com.example.testphotos.classes.User" />
         <argument
             android:name="albumName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_AlbumFragment_to_PhotoViewerFragment"
+            app:destination="@id/PhotoViewerFragment" />
     </fragment>
     <fragment
         android:id="@+id/PhotoViewerFragment"
         android:name="com.example.testphotos.PhotoViewerFragment"
         android:label="@string/photoviewer_fragment_label"
         tools:layout="@layout/photoviewer">
-        <argument
-            android:name="album"
-            app:argType="com.example.testphotos.classes.Album"/>
-        <argument
-            android:name="photo"
-            app:argType="com.example.testphotos.classes.Photo"/>
-        <argument
-            android:name="photoIndex"
-            app:argType="integer"/>
-
         <action
             android:id="@+id/action_PhotoViewerFragment_to_AlbumFragment"
-            app:destination="@+id/AlbumFragment"/>
+            app:destination="@id/AlbumFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.testphotos.classes.User" />
+        <argument
+            android:name="album"
+            app:argType="com.example.testphotos.classes.Album" />
+        <argument
+            android:name="photo"
+            app:argType="com.example.testphotos.classes.Photo" />
+        <argument
+            android:name="PhotoIndex"
+            app:argType="integer" />
     </fragment>
 </navigation>

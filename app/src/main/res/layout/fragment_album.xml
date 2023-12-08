@@ -15,7 +15,7 @@
             android:id="@+id/addPhotoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Photo"
+            android:text="Add"
             app:layout_constraintEnd_toStartOf="@+id/homeButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +34,6 @@
             android:layout_width="0dp"
             android:layout_height="400dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/bottomButtons"
@@ -45,9 +44,10 @@
         </ListView>
 
         <Button
-            android:id="@+id/slideshowButton"
+            android:id="@+id/openPhotoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:text="Slideshow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/homeButton"
