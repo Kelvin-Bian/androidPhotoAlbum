@@ -35,6 +35,7 @@ public class FirstFragment extends Fragment {
     private ListView albumList;
     private ArrayAdapter<String> adapter;
     private User user;
+    private Album selectedAlbum;
 
     // Helper method to serialize the user object
     private void saveUser(User user) {
@@ -131,8 +132,16 @@ public class FirstFragment extends Fragment {
         binding.openAlbumButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Handle the click for openAlbumButton
-                Toast.makeText(getActivity(), "Open Album addPhotoButton clicked!", Toast.LENGTH_SHORT).show();
+                // Navigate to AlbumFragment
+                if(selectedAlbum != null) {
+                    FirstFragmentDirections.ActionFirstFragmentToSecondFragment action =
+                            FirstFragmentDirections.actionFirstFragmentToSecondFragment(user, selectedAlbum.getName());
+                    Navigation.findNavController(view).navigate(action);
+                }
+                else {
+                    Toast.makeText(getActivity(), "No Album Selected!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -140,8 +149,28 @@ public class FirstFragment extends Fragment {
         binding.deleteAlbumButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Handle the click for deleteAlbumButton
-                Toast.makeText(getActivity(), "Delete Album addPhotoButton clicked!", Toast.LENGTH_SHORT).show();
+                if (selectedAlbum != null && user != null) {
+                    // Delete the album
+                    boolean isDeleted = user.deleteAlbum(selectedAlbum.getName());
+                    if (isDeleted) {
+                        // Update the adapter and ListView
+                        adapter.clear();
+                        adapter.addAll(user.getAlbumNames());
+                        adapter.notifyDataSetChanged();
+
+                        // Save the updated user object
+                        saveUser(user);
+
+                        // Clear the selected album as it has been deleted
+                        selectedAlbum = null;
+
+                        Toast.makeText(getActivity(), "Album deleted successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Failed to delete album", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "No album selected or user data not available", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -149,19 +178,60 @@ public class FirstFragment extends Fragment {
         binding.renameAlbumButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Handle the click for renameAlbumButton
-                Toast.makeText(getActivity(), "Rename Album addPhotoButton clicked!", Toast.LENGTH_SHORT).show();
+                if (selectedAlbum == null) {
+                    Toast.makeText(getActivity(), "No album selected", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Rename Album");
+
+                // Set up the input
+                final EditText input = new EditText(getActivity());
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newName = input.getText().toString();
+                        if (!newName.isEmpty()) {
+                            boolean isRenamed = user.renameAlbum(selectedAlbum, newName);
+                            if (isRenamed) {
+                                // Update the adapter and ListView
+                                adapter.clear();
+                                adapter.addAll(user.getAlbumNames());
+                                adapter.notifyDataSetChanged();
+
+                                // Save the updated user object
+                                saveUser(user);
+
+                                Toast.makeText(getActivity(), "Album renamed successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), "Failed to rename album", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), "Album name cannot be empty", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
             }
         });
 
         albumList.setOnItemClickListener((parent, view1, position, id) -> {
             if (user != null) {
-                String selectedAlbum = user.getAlbumNames().get(position);
+                selectedAlbum = user.findAlbum(user.getAlbumNames().get(position));
+                Toast.makeText(getActivity(), "Selected Album!", Toast.LENGTH_SHORT).show();
 
-                // Navigate to AlbumFragment
-                FirstFragmentDirections.ActionFirstFragmentToSecondFragment action =
-                        FirstFragmentDirections.actionFirstFragmentToSecondFragment(user, selectedAlbum);
-                Navigation.findNavController(view).navigate(action);
             } else {
                 Toast.makeText(getActivity(), "User data is not available", Toast.LENGTH_SHORT).show();
             }
