@@ -154,19 +154,6 @@ public class AlbumFragment extends Fragment {
             Toast.makeText(getContext(), "Delete Photo", Toast.LENGTH_SHORT).show();
         });
 
-        binding.homeButton.setOnClickListener(v -> {
-            if (user != null) {
-                NavDirections action =
-                        AlbumFragmentDirections.actionSecondFragmentToFirstFragment(user);
-                NavHostFragment.findNavController(AlbumFragment.this).navigate(action);
-            }
-        });
-
-        binding.slideshowButton.setOnClickListener(v -> {
-            // Add your logic here
-            Toast.makeText(getContext(), "Slideshow", Toast.LENGTH_SHORT).show();
-        });
-
         binding.openPhotoButton.setOnClickListener(v -> {
             if (user != null && album != null && selectedPhoto != null) {
                 // Create a bundle with the necessary arguments

@@ -2,6 +2,7 @@ package com.example.testphotos;
 
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -31,7 +32,10 @@ import com.example.testphotos.classes.User;
 import com.example.testphotos.databinding.PhotoviewerBinding;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -58,6 +62,18 @@ public class PhotoViewerFragment extends Fragment {
     private ImageView photoView;
     private int photoIndex;
 
+    // Helper method to serialize the user object
+    private void saveUser(User user) {
+        try {
+            FileOutputStream fileOut = getContext().openFileOutput("user.ser", Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(user);
+            out.close();
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         binding = PhotoviewerBinding.inflate(inflater, container, false);
@@ -65,6 +81,7 @@ public class PhotoViewerFragment extends Fragment {
         // Retrieve arguments passed to this fragment
         if (getArguments() != null) {
             PhotoViewerFragmentArgs args = PhotoViewerFragmentArgs.fromBundle(getArguments());
+            user = args.getUser();
             album = args.getAlbum();
             p = args.getPhoto();
             photoIndex = args.getPhotoIndex();
@@ -153,6 +170,7 @@ public class PhotoViewerFragment extends Fragment {
                             locationTags.remove(old);
                             locationTagAdapter.setTags(locationTags);
                             locationTagAdapter.notifyDataSetChanged();
+                            saveUser(user);
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -196,6 +214,7 @@ public class PhotoViewerFragment extends Fragment {
                                     locationTags.add(newTag);
                                     locationTagAdapter.setTags(locationTags);
                                     locationTagAdapter.notifyDataSetChanged();
+                                    saveUser(user);
                                 }
                             } else {
                                 Toast.makeText(getActivity(), "Tag value cannot be empty", Toast.LENGTH_SHORT).show();
@@ -241,6 +260,7 @@ public class PhotoViewerFragment extends Fragment {
                                     personTags.add(newTag);
                                     personTagAdapter.setTags(personTags);
                                     personTagAdapter.notifyDataSetChanged();
+                                    saveUser(user);
                                 }
                             } else {
                                 Toast.makeText(getActivity(), "Tag value cannot be empty", Toast.LENGTH_SHORT).show();
@@ -283,6 +303,7 @@ public class PhotoViewerFragment extends Fragment {
                                     locationTags.add(new Tag("location", tagValue));
                                     locationTagAdapter.setTags(locationTags);
                                     locationTagAdapter.notifyDataSetChanged();
+                                    saveUser(user);
                                 }
                             } else {
                                 Toast.makeText(getActivity(), "Tag value cannot be empty", Toast.LENGTH_SHORT).show();
@@ -324,6 +345,7 @@ public class PhotoViewerFragment extends Fragment {
                                     personTags.add(new Tag("person", tagValue));
                                     personTagAdapter.setTags(personTags);
                                     personTagAdapter.notifyDataSetChanged();
+                                    saveUser(user);
                                 }
                             } else {
                                 Toast.makeText(getActivity(), "Tag value cannot be empty", Toast.LENGTH_SHORT).show();

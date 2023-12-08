@@ -1,8 +1,6 @@
 package com.example.testphotos.classes;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.net.Uri;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ public class Photo implements Serializable {
     private String uriString; // Used for serialization
     private ArrayList<Tag> tags;
 
-    private Context context;
 
     public Photo(Uri uri) {
         this.uri = uri;
@@ -21,14 +18,14 @@ public class Photo implements Serializable {
         this.tags = new ArrayList<>();
     }
 
-    public Bitmap getBitmap() {
-        if (uri == null && uriString != null) {
-            uri = Uri.parse(uriString); // Convert String back to Uri if needed
-        }
-        // Replace with code to decode Bitmap from Uri
-        // Example: return BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
-        return null;
-    }
+//    public Bitmap getBitmap() {
+//        if (uri == null && uriString != null) {
+//            uri = Uri.parse(uriString); // Convert String back to Uri if needed
+//        }
+//        // Replace with code to decode Bitmap from Uri
+//        // Example: return BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
+//        return null;
+//    }
 
 
     public Uri getUri() {
@@ -108,12 +105,15 @@ public class Photo implements Serializable {
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
         uriString = uri == null ? null : uri.toString();
         out.defaultWriteObject();
+        out.writeObject(tags); // Serialize the 'tags' ArrayList
     }
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
         in.defaultReadObject();
         uri = uriString == null ? null : Uri.parse(uriString);
+        tags = (ArrayList<Tag>) in.readObject(); // Deserialize the 'tags' ArrayList
     }
+
 
     public ArrayList<Tag> getTagsByName(Predicate<String> matchingName){
         ArrayList<Tag> res = new ArrayList<>();
