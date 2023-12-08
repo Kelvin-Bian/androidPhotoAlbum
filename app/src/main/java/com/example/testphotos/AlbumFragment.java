@@ -2,6 +2,7 @@ package com.example.testphotos;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import android.Manifest;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -145,13 +147,45 @@ public class AlbumFragment extends Fragment {
         });
 
         binding.movePhotoButton.setOnClickListener(v -> {
-            // Add your logic here
-            Toast.makeText(getContext(), "Move Photo", Toast.LENGTH_SHORT).show();
+            if (user != null && selectedPhoto != null) {
+                // Create an array of album names
+                String[] albumNames = user.getAlbums().stream().map(Album::getName).toArray(String[]::new);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle("Select an Album");
+
+                builder.setItems(albumNames, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Album selectedAlbum = user.getAlbums().get(which);
+
+                        // Move the photo to the selected album and remove it from the current album
+                        if (selectedAlbum != null) {
+                            album.deletePhoto(selectedPhoto);
+                            selectedAlbum.addPhoto(selectedPhoto);
+                            updateListView();
+                            saveUser(user);
+                            Toast.makeText(getContext(), "Photo moved to " + selectedAlbum.getName(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
         });
 
         binding.deletePhotoButton.setOnClickListener(v -> {
-            // Add your logic here
+            if (album != null && selectedPhoto != null) {
+                album.deletePhoto(selectedPhoto); // Remove the selected photo from the album
+                updateListView(); // Update the ListView
+                saveUser(user); // Save the updated user object
+                selectedPhoto = null; // Reset the selected photo
+            }
             Toast.makeText(getContext(), "Delete Photo", Toast.LENGTH_SHORT).show();
+
         });
 
         binding.openPhotoButton.setOnClickListener(v -> {
