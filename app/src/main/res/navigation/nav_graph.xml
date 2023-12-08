@@ -54,5 +54,8 @@
         <argument
             android:name="photo"
             app:argType="com.example.testphotos.classes.Photo" />
+        <argument
+            android:name="PhotoIndex"
+            app:argType="integer" />
     </fragment>
 </navigation>

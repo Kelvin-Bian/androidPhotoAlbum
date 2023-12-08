@@ -7,17 +7,17 @@
     tools:context=".PhotoViewerFragment">
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/photoView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/nextButton"
+        app:layout_constraintStart_toEndOf="@id/prevButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/river"
-        tools:srcCompat="@drawable/river" />
+        app:layout_constraintVertical_bias="1.0"
+      />
 
     <TextView
         android:id="@+id/filename"
@@ -28,7 +28,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tags"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        app:layout_constraintTop_toBottomOf="@+id/photoView" />
 
     <LinearLayout
         android:id="@+id/tags"
@@ -114,5 +114,24 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/ic_next"
+        app:layout_constraintBottom_toTopOf="@+id/filename"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/photoView"
+        app:layout_constraintTop_toTopOf="@+id/photoView" />
+    <Button
+        android:id="@+id/prevButton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/ic_previous"
+        app:layout_constraintBottom_toTopOf="@+id/filename"
+        app:layout_constraintEnd_toStartOf="@id/photoView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/photoView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

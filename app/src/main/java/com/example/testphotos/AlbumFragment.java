@@ -176,7 +176,7 @@ public class AlbumFragment extends Fragment {
                 args.putSerializable("selectedPhoto", selectedPhoto);
 
                 // Navigate to PhotoViewerFragment with the arguments
-                NavDirections action = AlbumFragmentDirections.actionAlbumFragmentToPhotoViewerFragment(user, album, selectedPhoto);
+                NavDirections action = AlbumFragmentDirections.actionAlbumFragmentToPhotoViewerFragment(user, album, selectedPhoto, adapter.getPosition(selectedPhoto));
                 NavHostFragment.findNavController(this).navigate(action);
             }
             Toast.makeText(getContext(), "Open Photo", Toast.LENGTH_SHORT).show();
