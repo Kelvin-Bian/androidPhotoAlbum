@@ -120,9 +120,13 @@ public class AlbumFragment extends Fragment {
             // Rest of your code for handling the new photo
             Photo newPhoto = new Photo(imageUri);
             if (album != null) {
-                album.addPhoto(newPhoto);
-                updateListView();
-                saveUser(user);
+                boolean success = album.addPhoto(newPhoto);
+                if(success) {
+                    updateListView();
+                    saveUser(user);
+                }
+                else
+                    Toast.makeText(getContext(), "Image already exists",Toast.LENGTH_LONG).show();
             }
         } else {
             Toast.makeText(getContext(), "You haven't picked an image",Toast.LENGTH_LONG).show();

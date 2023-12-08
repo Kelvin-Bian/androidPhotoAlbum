@@ -232,7 +232,7 @@ public class FirstFragment extends Fragment {
             if (user != null) {
                 selectedAlbum = user.findAlbum(user.getAlbumNames().get(position));
                 adapter.setSelectedPosition(position);
-                Toast.makeText(getActivity(), "Selected Album!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Selected Album!", Toast.LENGTH_SHORT).show();
 
             } else {
                 Toast.makeText(getActivity(), "User data is not available", Toast.LENGTH_SHORT).show();
