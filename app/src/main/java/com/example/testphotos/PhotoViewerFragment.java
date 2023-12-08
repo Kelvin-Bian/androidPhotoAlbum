@@ -363,28 +363,5 @@ public class PhotoViewerFragment extends Fragment {
                 }
             });
     }
-    private class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            String imageUrl = params[0];
-            try {
-                URL url = new URL(imageUrl);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                return BitmapFactory.decodeStream(input);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
 
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (result != null) {
-                photoView.setImageBitmap(result);
-            }
-        }
-    }
 }

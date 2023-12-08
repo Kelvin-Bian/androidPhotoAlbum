@@ -21,6 +21,8 @@ package com.example.testphotos;
         import android.content.DialogInterface;
         import android.text.InputType;
         import androidx.navigation.Navigation;
+        import androidx.recyclerview.widget.LinearLayoutManager;
+        import androidx.recyclerview.widget.RecyclerView;
 
 
         import java.io.FileOutputStream;
@@ -33,9 +35,10 @@ public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
     private ListView albumList;
-    private ArrayAdapter<String> adapter;
+    private AlbumListAdapter adapter;
     private User user;
     private Album selectedAlbum;
+    private int selectedPosition = -1;
 
     // Helper method to serialize the user object
     private void saveUser(User user) {
@@ -56,7 +59,8 @@ public class FirstFragment extends Fragment {
     ) {
         // Inflate the layout for this fragment
         binding = FragmentFirstBinding.inflate(inflater, container, false);
-        albumList = binding.albumList; // Replace with your ListView ID
+        albumList = binding.albumList;
+
 
         // Retrieve the object from the arguments bundle
         Bundle args = getArguments();
@@ -69,10 +73,8 @@ public class FirstFragment extends Fragment {
         }
 
 //        albumNames = new ArrayList<>();
-        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, user.getAlbumNames());
+        adapter = new AlbumListAdapter(getContext(), user.getAlbumNames());
         albumList.setAdapter(adapter);
-
-
 
         return binding.getRoot();
     }
@@ -141,7 +143,6 @@ public class FirstFragment extends Fragment {
                 else {
                     Toast.makeText(getActivity(), "No Album Selected!", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -230,12 +231,14 @@ public class FirstFragment extends Fragment {
         albumList.setOnItemClickListener((parent, view1, position, id) -> {
             if (user != null) {
                 selectedAlbum = user.findAlbum(user.getAlbumNames().get(position));
+                adapter.setSelectedPosition(position);
                 Toast.makeText(getActivity(), "Selected Album!", Toast.LENGTH_SHORT).show();
 
             } else {
                 Toast.makeText(getActivity(), "User data is not available", Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 

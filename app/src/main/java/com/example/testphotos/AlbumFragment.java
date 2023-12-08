@@ -207,7 +207,6 @@ public class AlbumFragment extends Fragment {
         binding.photoList.setOnItemClickListener((parent, v, position, id) -> {
             selectedPhoto = adapter.getItem(position);
             adapter.setSelectedPosition(position);
-            Toast.makeText(getContext(), "Photo item clicked at position: " + position, Toast.LENGTH_SHORT).show();
         });
 
     }
