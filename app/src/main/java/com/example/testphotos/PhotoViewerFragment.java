@@ -1,15 +1,22 @@
 package com.example.testphotos;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +30,9 @@ import com.example.testphotos.classes.Tag;
 import com.example.testphotos.databinding.PhotoviewerBinding;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class PhotoViewerFragment extends Fragment {
@@ -43,14 +53,31 @@ public class PhotoViewerFragment extends Fragment {
     private Button prevButton;
     private Button nextButton;
 
+    private ImageView photoView;
+    private int photoIndex;
 
+    private Uri getUriFromDrawableResource(int drawableResourceId) {
+        Resources resources = getResources();
+        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + resources.getResourcePackageName(drawableResourceId)
+                + '/' + resources.getResourceTypeName(drawableResourceId)
+                + '/' + resources.getResourceEntryName(drawableResourceId));
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         binding = PhotoviewerBinding.inflate(inflater, container, false);
         //@TODO pass in photo instead of using test photo
-        File file = new File("/Users/jessicaluo/Desktop/android/app/src/main/res/drawable/river.png");
-        Uri fileUri = Uri.fromFile(file);
-        p = new Photo(fileUri);
+        // Retrieve arguments passed to this fragment
+        if (getArguments() != null) {
+            PhotoViewerFragmentArgs args = PhotoViewerFragmentArgs.fromBundle(getArguments());
+            album = args.getAlbum();
+            p = args.getPhoto();
+            photoIndex = args.getPhotoIndex();
+        }
+        //p = new Photo(getUriFromDrawableResource(R.drawable.river));
+        photoView = binding.photoView;
+
+        photoView.setImageURI(p.getUri());
         //@TODO set album to passed in album
         locationTags = p.getTagsByName(s-> s.equals("location"));
         personTags= p.getTagsByName(s->s.equals("person"));
@@ -80,13 +107,39 @@ public class PhotoViewerFragment extends Fragment {
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int oldIndex = photoIndex;
+                if (photoIndex == 0) {
+                    photoIndex = album.getPhotos().size() - 1;
+                } else
+                    photoIndex--;
+                if(photoIndex!=oldIndex)
+                    displayPhoto(album.getPhotos().get(photoIndex));
             }
         });
         nextButton = binding.nextButton;
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int oldIndex = photoIndex;
+                photoIndex = (photoIndex + 1) % album.getPhotos().size();
+                if(photoIndex!=oldIndex)
+                    displayPhoto(album.getPhotos().get(photoIndex));
+            }
+        });
         return binding.getRoot();
     }
+    private void displayPhoto(Photo photo){
+        p = photo;
+        photoView.setImageURI(p.getUri());
+        //show current photo's tags
+        locationTags = p.getTagsByName(s-> s.equals("location"));
+        locationTagAdapter.setTags(locationTags);
+        locationTagAdapter.notifyDataSetChanged();
 
+        personTags= p.getTagsByName(s->s.equals("person"));
+        personTagAdapter.setTags(personTags);
+        personTagAdapter.notifyDataSetChanged();
+    }
     public void setClickListenerDeleteTag(TagAdapter adapter, boolean location){
             adapter.setOnItemClickListenerDelete(new TagAdapter.OnItemClickListener() {
                 public void onItemClick(int position, String oldValue) {
@@ -162,12 +215,11 @@ public class PhotoViewerFragment extends Fragment {
                 }
             });
         else
-        if(location)
             adapter.setOnItemClickListenerEdit(new TagAdapter.OnItemClickListener() {
                 public void onItemClick(int position, String oldValue) {
                     // Handle the button click, you have access to the position and associated text
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Edit value for location tag. Selected value is \""+oldValue+"\"");
+                    builder.setTitle("Edit value for person tag. Selected value is \""+oldValue+"\"");
 
                     // Set up the input
                     final EditText input = new EditText(getActivity());
@@ -188,10 +240,10 @@ public class PhotoViewerFragment extends Fragment {
                                 else{
                                     Tag old = new Tag("person", oldValue);
                                     p.deleteTag(old);
-                                    locationTags.remove(old);
-                                    locationTags.add(newTag);
-                                    locationTagAdapter.setTags(locationTags);
-                                    locationTagAdapter.notifyDataSetChanged();
+                                    personTags.remove(old);
+                                    personTags.add(newTag);
+                                    personTagAdapter.setTags(personTags);
+                                    personTagAdapter.notifyDataSetChanged();
                                 }
                             } else {
                                 Toast.makeText(getActivity(), "Tag value cannot be empty", Toast.LENGTH_SHORT).show();
@@ -291,5 +343,29 @@ public class PhotoViewerFragment extends Fragment {
                     builder.show();
                 }
             });
+    }
+    private class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            String imageUrl = params[0];
+            try {
+                URL url = new URL(imageUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                return BitmapFactory.decodeStream(input);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            if (result != null) {
+                photoView.setImageBitmap(result);
+            }
+        }
     }
 }

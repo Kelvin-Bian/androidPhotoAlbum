@@ -122,8 +122,8 @@ public class AlbumFragment extends Fragment {
 
         binding.homeButton.setOnClickListener(v -> {
             if (user != null) {
-                AlbumFragmentDirections.ActionSecondFragmentToFirstFragment action =
-                        AlbumFragmentDirections.actionSecondFragmentToFirstFragment(user);
+                AlbumFragmentDirections.ActionAlbumFragmentToFirstFragment action =
+                        AlbumFragmentDirections.actionAlbumFragmentToFirstFragment(user);
                 NavHostFragment.findNavController(AlbumFragment.this).navigate((NavDirections) action);
             }
         });
@@ -141,7 +141,10 @@ public class AlbumFragment extends Fragment {
 
         binding.photoList.setOnItemClickListener((parent, v, position, id) -> {
             // Add your logic here
-            Toast.makeText(getContext(), "Photo item clicked at position: " + position, Toast.LENGTH_SHORT).show();
+            Photo p = album.getPhotos().get(position);
+            AlbumFragmentDirections.ActionAlbumFragmentToPhotoViewerFragment action =
+                    AlbumFragmentDirections.actionAlbumFragmentToPhotoViewerFragment(album, p, position);
+            NavHostFragment.findNavController(AlbumFragment.this).navigate((NavDirections) action);
         });
 
     }

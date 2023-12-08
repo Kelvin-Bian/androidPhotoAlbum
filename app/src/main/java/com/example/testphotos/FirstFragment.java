@@ -142,8 +142,8 @@ public class FirstFragment extends Fragment {
                 String selectedAlbum = user.getAlbumNames().get(position);
 
                 // Navigate to AlbumFragment
-                FirstFragmentDirections.ActionFirstFragmentToSecondFragment action =
-                        FirstFragmentDirections.actionFirstFragmentToSecondFragment(user, selectedAlbum);
+                FirstFragmentDirections.ActionFirstFragmentToAlbumFragment action =
+                        FirstFragmentDirections.actionFirstFragmentToAlbumFragment(user, selectedAlbum);
                 Navigation.findNavController(view).navigate(action);
             } else {
                 Toast.makeText(getActivity(), "User data is not available", Toast.LENGTH_SHORT).show();
