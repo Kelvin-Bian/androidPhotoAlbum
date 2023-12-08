@@ -56,13 +56,6 @@ public class PhotoViewerFragment extends Fragment {
     private ImageView photoView;
     private int photoIndex;
 
-    private Uri getUriFromDrawableResource(int drawableResourceId) {
-        Resources resources = getResources();
-        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                "://" + resources.getResourcePackageName(drawableResourceId)
-                + '/' + resources.getResourceTypeName(drawableResourceId)
-                + '/' + resources.getResourceEntryName(drawableResourceId));
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         binding = PhotoviewerBinding.inflate(inflater, container, false);
@@ -73,6 +66,7 @@ public class PhotoViewerFragment extends Fragment {
             album = args.getAlbum();
             p = args.getPhoto();
             photoIndex = args.getPhotoIndex();
+            binding.filename.setText(p.getFileName());
         }
         //p = new Photo(getUriFromDrawableResource(R.drawable.river));
         photoView = binding.photoView;
@@ -131,6 +125,7 @@ public class PhotoViewerFragment extends Fragment {
     private void displayPhoto(Photo photo){
         p = photo;
         photoView.setImageURI(p.getUri());
+        binding.filename.setText(p.getFileName());
         //show current photo's tags
         locationTags = p.getTagsByName(s-> s.equals("location"));
         locationTagAdapter.setTags(locationTags);
