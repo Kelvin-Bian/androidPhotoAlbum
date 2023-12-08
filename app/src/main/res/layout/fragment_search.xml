@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- AnchorPane -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Sidebar -->
+        <LinearLayout
+            android:id="@+id/sidebar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="19dp">
+
+            <!-- Find Photos Label -->
+
+
+            <!-- Tags TitledPane -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tagsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <!-- Tags TitledPane Content -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical">
+
+                    <LinearLayout
+                        android:id="@+id/tagsContentLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <!-- Search using 1 tag or 2 tags -->
+                        <TextView
+                            android:id="@+id/searchInstruction"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="Search using 1 or 2 tags. Default OR if all fields are filled."
+                            android:textAlignment="center"
+                            android:wrapContent="true" />
+
+                        <!-- Tag 1 -->
+                        <LinearLayout
+                            android:id="@+id/tag1Layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal">
+
+                            <Spinner
+                                android:id="@+id/tag1type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="45dp"
+                                android:hint="Tag 1" />
+
+                            <TextView
+                                android:id="@+id/equalSign1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=":" />
+
+                            <EditText
+                                android:id="@+id/tag1value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:hint="value"
+                                android:inputType="none" />
+
+                        </LinearLayout>
+
+                        <!-- AND / OR Buttons -->
+                        <LinearLayout
+                            android:id="@+id/andOrButtonsLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <Button
+                                android:id="@+id/andButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="15dp"
+                                android:text="AND"
+                                android:textAllCaps="false" />
+
+                            <Button
+                                android:id="@+id/orButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="15dp"
+                                android:text="OR"
+                                android:textAllCaps="false" />
+                        </LinearLayout>
+
+                        <!-- Tag 2 -->
+                        <LinearLayout
+                            android:id="@+id/tag2Layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal">
+
+                            <Spinner
+                                android:id="@+id/tag2type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="45dp"
+                                android:hint="Tag 2" />
+
+                            <TextView
+                                android:id="@+id/equalSign2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=":" />
+
+                            <EditText
+                                android:id="@+id/tag2value"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:hint="value"
+                                android:inputType="none" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/searchButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="Search"
+                            android:textAllCaps="false" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TableLayout
+                android:id="@+id/searchResults"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableLayout>
+
+
+        </LinearLayout>
+    </FrameLayout>
+</RelativeLayout>
