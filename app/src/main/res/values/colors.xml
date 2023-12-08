@@ -6,4 +6,5 @@
     <color name="bg">#CAE6ED</color>
     <color name="text">#180B3C</color>
     <color name="list_bg">#20065B6A</color>
+    <color name="selected_item_bg">#A0E8FA</color>
 </resources>

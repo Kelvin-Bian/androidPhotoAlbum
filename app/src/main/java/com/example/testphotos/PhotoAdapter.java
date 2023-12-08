@@ -20,6 +20,8 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
         super(context, 0, photos);
     }
 
+    private int selectedPosition = -1;
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Check if an existing view is being reused, otherwise inflate the view
@@ -42,6 +44,12 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
             throw new RuntimeException(e);
         }
 
+        //diff bg color if selected by user
+        if (position == selectedPosition) {
+            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.selected_item_bg));
+        } else {
+            convertView.setBackgroundColor(getContext().getResources().getColor(android.R.color.transparent));
+        }
 
         TextView textView = convertView.findViewById(R.id.photoNameTextView);
 
@@ -49,5 +57,9 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
 
         // Return the completed view to render on screen
         return convertView;
+    }
+    public void setSelectedPosition(int position) {
+        selectedPosition = position;
+        notifyDataSetChanged();
     }
 }
