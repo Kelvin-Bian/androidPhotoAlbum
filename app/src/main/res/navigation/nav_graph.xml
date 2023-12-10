@@ -17,6 +17,9 @@
         <argument
             android:name="user"
             app:argType="com.example.testphotos.classes.User" />
+        <action
+            android:id="@+id/action_FirstFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/AlbumFragment"
@@ -24,27 +27,21 @@
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_album">
 
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
         <argument
             android:name="user"
             app:argType="com.example.testphotos.classes.User" />
-        <argument
-            android:name="albumName"
-            app:argType="string" />
         <action
             android:id="@+id/action_AlbumFragment_to_PhotoViewerFragment"
             app:destination="@id/PhotoViewerFragment" />
+        <argument
+            android:name="album"
+            app:argType="com.example.testphotos.classes.Album" />
     </fragment>
     <fragment
         android:id="@+id/PhotoViewerFragment"
         android:name="com.example.testphotos.PhotoViewerFragment"
         android:label="@string/photoviewer_fragment_label"
         tools:layout="@layout/photoviewer">
-        <action
-            android:id="@+id/action_PhotoViewerFragment_to_AlbumFragment"
-            app:destination="@id/AlbumFragment" />
         <argument
             android:name="user"
             app:argType="com.example.testphotos.classes.User" />
@@ -57,5 +54,17 @@
         <argument
             android:name="PhotoIndex"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.testphotos.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+        <argument
+            android:name="user"
+            app:argType="com.example.testphotos.classes.User" />
+        <action
+            android:id="@+id/action_searchFragment_to_PhotoViewerFragment"
+            app:destination="@id/PhotoViewerFragment" />
     </fragment>
 </navigation>

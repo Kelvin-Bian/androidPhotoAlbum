@@ -79,7 +79,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle button click here
+                // Handle toSearchButton click here
                 String text = tagValue.getText().toString();
                 if (onItemClickListenerEdit != null) {
                     onItemClickListenerEdit.onItemClick(holder.getAdapterPosition(), text);
@@ -89,7 +89,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle button click here
+                // Handle toSearchButton click here
                 String text = tagValue.getText().toString();
                 if (onItemClickListenerDelete != null) {
                     onItemClickListenerDelete.onItemClick(holder.getAdapterPosition(), text);

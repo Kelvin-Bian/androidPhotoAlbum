@@ -42,7 +42,6 @@ public class AlbumFragment extends Fragment {
     private FragmentAlbumBinding binding;
     private User user;
     private Album album;
-    private String albumName;
     private PhotoAdapter adapter;
     private Photo selectedPhoto;
 
@@ -72,11 +71,8 @@ public class AlbumFragment extends Fragment {
         if (getArguments() != null) {
             AlbumFragmentArgs args = AlbumFragmentArgs.fromBundle(getArguments());
             user = args.getUser();  // Assuming User class is Parcelable or Serializable
-            albumName = args.getAlbumName();
+            album = args.getAlbum();
 
-            // Here, you can also initialize your Album object based on the albumName and user
-            // For example, you could retrieve the album from the user object
-            album = user.findAlbum(albumName);
         }
 
         // Set up the ListView with PhotoAdapter
@@ -200,7 +196,25 @@ public class AlbumFragment extends Fragment {
                 args.putSerializable("album", album);
                 args.putSerializable("selectedPhoto", selectedPhoto);
 
-                // Navigate to PhotoViewerFragment with the arguments
+                //     // Setting onItemClickListener for the ListView
+                //    searchOutputList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                //        @Override
+                //        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //            // Extracting the selected Photo and its index
+                //            Photo selectedPhoto = (Photo) parent.getItemAtPosition(position);
+                //            int selectedIndex = position;
+                //
+                //            // Creating a bundle to pass data
+                //            Bundle bundle = new Bundle();
+                //            bundle.putSerializable("user", user); // Ensure User class implements Serializable
+                //            bundle.putSerializable("album", album); // Ensure Album class implements Serializable
+                //            bundle.putSerializable("selectedPhoto", selectedPhoto); // Ensure Photo class implements Serializable
+                //            bundle.putInt("selectedIndex", selectedIndex);
+                //
+                //            // Navigating to PhotoViewerFragment with the bundle
+                //            Navigation.findNavController(view).navigate(R.id.photoViewerFragment, bundle);
+                //        }
+                //    }); to PhotoViewerFragment with the arguments
                 NavDirections action = AlbumFragmentDirections.actionAlbumFragmentToPhotoViewerFragment(user, album, selectedPhoto, adapter.getPosition(selectedPhoto));
                 NavHostFragment.findNavController(this).navigate(action);
             }

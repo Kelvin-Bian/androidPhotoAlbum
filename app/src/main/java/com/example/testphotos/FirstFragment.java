@@ -129,7 +129,15 @@ public class FirstFragment extends Fragment {
             }
 
         });
-
+        binding.toSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Navigate to AlbumFragment
+                FirstFragmentDirections.ActionFirstFragmentToSearchFragment action =
+                        FirstFragmentDirections.actionFirstFragmentToSearchFragment(user);
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
         // Set up the listener for the openAlbumButton
         binding.openAlbumButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +145,7 @@ public class FirstFragment extends Fragment {
                 // Navigate to AlbumFragment
                 if(selectedAlbum != null) {
                     FirstFragmentDirections.ActionFirstFragmentToSecondFragment action =
-                            FirstFragmentDirections.actionFirstFragmentToSecondFragment(user, selectedAlbum.getName());
+                            FirstFragmentDirections.actionFirstFragmentToSecondFragment(user, selectedAlbum);
                     Navigation.findNavController(view).navigate(action);
                 }
                 else {

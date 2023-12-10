@@ -157,7 +157,7 @@ public class PhotoViewerFragment extends Fragment {
     public void setClickListenerDeleteTag(TagAdapter adapter, boolean location){
             adapter.setOnItemClickListenerDelete(new TagAdapter.OnItemClickListener() {
                 public void onItemClick(int position, String oldValue) {
-                    // Handle the button click, you have access to the position and associated text
+                    // Handle the toSearchButton click, you have access to the position and associated text
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Are you sure you want to delete \""+oldValue+"\"");
 
@@ -187,7 +187,7 @@ public class PhotoViewerFragment extends Fragment {
         if(location)
             adapter.setOnItemClickListenerEdit(new TagAdapter.OnItemClickListener() {
                 public void onItemClick(int position, String oldValue) {
-                    // Handle the button click, you have access to the position and associated text
+                    // Handle the toSearchButton click, you have access to the position and associated text
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Edit value for location tag. Selected value is \""+oldValue+"\"");
 
@@ -233,7 +233,7 @@ public class PhotoViewerFragment extends Fragment {
         else
             adapter.setOnItemClickListenerEdit(new TagAdapter.OnItemClickListener() {
                 public void onItemClick(int position, String oldValue) {
-                    // Handle the button click, you have access to the position and associated text
+                    // Handle the toSearchButton click, you have access to the position and associated text
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Edit value for person tag. Selected value is \""+oldValue+"\"");
 
