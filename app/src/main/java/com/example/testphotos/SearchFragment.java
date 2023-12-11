@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,12 +26,14 @@ public class SearchFragment extends Fragment {
 
     private User user;
     private Spinner tag1TypeSpinner, tag2TypeSpinner;
-    private EditText tag1ValueEditText, tag2ValueEditText;
+    private AutoCompleteTextView tag1ValueEditText, tag2ValueEditText;
     private Button andButton, orButton;
     private boolean andSearch;
     private ListView searchOutputList;
     private Album album;
     private PhotoAdapter photoAdapter;
+
+    private Button searchButton;
 
     @Override
     public void onResume() {
@@ -54,6 +57,7 @@ public class SearchFragment extends Fragment {
             andButton = view.findViewById(R.id.andButton);
             orButton = view.findViewById(R.id.orButton);
             searchOutputList = view.findViewById(R.id.searchOutputList);
+            searchButton = view.findViewById(R.id.searchButton);
 
             // set up spinners
             String[] spinnerValues = new String[]{"person", "location"};
@@ -98,34 +102,48 @@ public class SearchFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Extracting the selected Photo and its index
                 Photo selectedPhoto = (Photo) parent.getItemAtPosition(position);
-                int selectedIndex = position;
-
+                int selectedIndex = album.index(selectedPhoto);
 
                 NavDirections action = SearchFragmentDirections.actionSearchFragmentToPhotoViewerFragment(user, album, selectedPhoto, selectedIndex);
                 Navigation.findNavController(view).navigate(action);
             }
         });
 
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+//        TextWatcher textWatcher = new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                search();
+//            }
+//        };
+//        tag1ValueEditText.addTextChangedListener(textWatcher);
+//        tag2ValueEditText.addTextChangedListener(textWatcher);
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                search();
-            }
-        };
-        tag1ValueEditText.addTextChangedListener(textWatcher);
-        tag2ValueEditText.addTextChangedListener(textWatcher);
         AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                search();
+                if(tag1TypeSpinner.getSelectedItem()!= null) {
+                    String tag1Name = tag1TypeSpinner.getSelectedItem().toString().trim();
+                    ArrayAdapter<Tag> tag1Adapter = new ArrayAdapter<Tag>
+                            (getContext(), android.R.layout.select_dialog_item, user.getAllTagsByName(name -> name.equals(tag1Name)));
+                    search();
+                    tag1ValueEditText.setThreshold(1);
+                    tag1ValueEditText.setAdapter(tag1Adapter);
+                }
+                else{
+                    String tag2Name = tag2TypeSpinner.getSelectedItem().toString().trim();
+                    ArrayAdapter<Tag> tag2Adapter = new ArrayAdapter<Tag>
+                            (getContext(), android.R.layout.select_dialog_item, user.getAllTagsByName(name -> name.equals(tag2Name)));
+                    tag2ValueEditText.setThreshold(1);
+                    tag2ValueEditText.setAdapter(tag2Adapter);
+                }
             }
 
             @Override
@@ -134,7 +152,12 @@ public class SearchFragment extends Fragment {
         };
         tag1TypeSpinner.setOnItemSelectedListener(listener);
         tag2TypeSpinner.setOnItemSelectedListener(listener);
-
+        searchButton.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                search();
+            }
+        });
         return view;
     }
     private void search() {

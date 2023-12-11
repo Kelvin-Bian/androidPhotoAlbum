@@ -5,6 +5,8 @@ import android.net.Uri;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Predicate;
+
 public class Album implements Serializable{
     private HashMap<String, Photo> photos; // Changed to String key
     private String name;
@@ -24,12 +26,24 @@ public class Album implements Serializable{
         photos.put(uriString, p);
         return true;
     }
+    public int index(Photo p){
+        ArrayList<Photo> photosList = getPhotos();
+        return photosList.indexOf(p);
+    }
 
     public boolean deletePhoto(Photo p) {
         String uriString = p.getUri().toString(); // Convert Uri to String
         return photos.remove(uriString) != null;
     }
-
+    public ArrayList<Tag> getTagsByName(Predicate<String> matchingName){
+        ArrayList<Tag> tags = new ArrayList<>();
+        for(Photo p: getPhotos()){
+            for(Tag t: p.getTagsByName(matchingName)){
+                tags.add(t);
+            }
+        }
+        return tags;
+    }
     public String getName() {
         return name;
     }

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
+
 public class User implements Serializable {
     private HashMap<String, Album> albums;
 
@@ -37,7 +39,15 @@ public class User implements Serializable {
         }
         return albumNames;
     }
-
+    public ArrayList<Tag> getAllTagsByName(Predicate<String> matchingName){
+        ArrayList<Tag> tags = new ArrayList<>();
+        for(Album a: getAlbums()){
+            for(Tag t: a.getTagsByName(matchingName)){
+                tags.add(t);
+            }
+        }
+        return tags;
+    }
     /**
      * Finds and retrieves a specific album by name.
      *

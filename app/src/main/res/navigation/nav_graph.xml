@@ -58,7 +58,7 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.testphotos.SearchFragment"
-        android:label="SearchFragment"
+        android:label="Search"
         tools:layout="@layout/fragment_search">
         <argument
             android:name="user"

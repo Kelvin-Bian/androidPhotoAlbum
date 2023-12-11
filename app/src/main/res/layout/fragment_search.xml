@@ -80,14 +80,13 @@
                                 android:layout_height="wrap_content"
                                 android:text=":" />
 
-                            <EditText
+                            <AutoCompleteTextView
                                 android:id="@+id/tag1value"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:hint="value"
-                                android:inputType="none" />
+                                android:hint="value" />
 
                         </LinearLayout>
 
@@ -141,19 +140,25 @@
                                 android:layout_height="wrap_content"
                                 android:text=":" />
 
-                            <EditText
+                            <AutoCompleteTextView
                                 android:id="@+id/tag2value"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:hint="value"
-                                android:inputType="none" />
+                                android:hint="value" />
                         </LinearLayout>
 
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="search" />
 
             <ListView
                 android:id="@+id/searchOutputList"
