@@ -80,7 +80,6 @@ public class SearchFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     andSearch = true;
-                    search();
                     // Implement AND logic
                     Toast.makeText(getActivity(), "AND Clicked", Toast.LENGTH_SHORT).show();
                 }
@@ -90,7 +89,6 @@ public class SearchFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     andSearch = false;
-                    search();
                     // Implement OR logic
                     Toast.makeText(getActivity(), "OR Clicked", Toast.LENGTH_SHORT).show();
                 }
@@ -133,11 +131,10 @@ public class SearchFragment extends Fragment {
                     String tag1Name = tag1TypeSpinner.getSelectedItem().toString().trim();
                     ArrayAdapter<Tag> tag1Adapter = new ArrayAdapter<Tag>
                             (getContext(), android.R.layout.select_dialog_item, user.getAllTagsByName(name -> name.equals(tag1Name)));
-                    search();
                     tag1ValueEditText.setThreshold(1);
                     tag1ValueEditText.setAdapter(tag1Adapter);
                 }
-                else{
+                if(tag2TypeSpinner.getSelectedItem()!= null){
                     String tag2Name = tag2TypeSpinner.getSelectedItem().toString().trim();
                     ArrayAdapter<Tag> tag2Adapter = new ArrayAdapter<Tag>
                             (getContext(), android.R.layout.select_dialog_item, user.getAllTagsByName(name -> name.equals(tag2Name)));
